@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profesionální zednictví ve vašem okolí</title>
+    <meta name="description" content="Zednické práce, nabízí špičkové služby v oblasti zednictví pro rezidenční a komerční projekty">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div id="app">
+        <header :class="['fixed w-full z-50 transition-all duration-300', isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4']">
+            <div class="container mx-auto px-4 flex justify-between items-center">
+                <a :href="'#'" :class="['text-2xl font-bold flex items-center', isScrolled ? 'text-gray-800' : 'text-white']">
+                    <!-- <img src="/logo.png" alt="Logo" class="h-8 w-auto mr-2"> -->
+                    <span class="font-extrabold">{{ config.companyName }}</span>
+                </a>
+        
+                <nav class="hidden md:flex space-x-6">
+                    <a v-for="item in navItems" :key="item.href" :href="item.href"
+                       :class="['hover:text-yellow-400 transition duration-300 relative', isScrolled ? 'text-gray-800' : 'text-white']">
+                        {{ item.text }}
+                        <span class="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-400 transform scale-x-0 transition-transform duration-300 origin-left hover:scale-x-100"></span>
+                    </a>
+                </nav>
+        
+                <div :class="['hidden md:flex items-center', isScrolled ? 'text-gray-800' : 'text-white']">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    <a :href="'tel:' + config.phone" class="hover:text-yellow-400 transition duration-300">
+                        {{ config.phone }}
+                    </a>
+                </div>
+        
+                <button @click="toggleMobileMenu" class="md:hidden focus:outline-none" :class="isScrolled ? 'text-gray-800' : 'text-white'">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+        
+        <transition name="mobile-menu">
+            <div v-if="mobileMenuOpen" class="md:hidden bg-gray-800 text-white fixed top-0 left-0 w-full h-full z-50">
+                <div class="container mx-auto px-4 py-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-2xl font-bold">{{ config.companyName }}</span>
+                        <button @click="toggleMobileMenu" class="focus:outline-none text-white">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <nav class="flex flex-col space-y-4">
+                        <a v-for="item in navItems" :key="item.href" :href="item.href"
+                           class="text-lg hover:text-yellow-400 transition duration-300" @click="toggleMobileMenu">
+                            {{ item.text }}
+                        </a>
+                    </nav>
+                    <div class="mt-6 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                        </svg>
+                        <a :href="'tel:' + config.phone" class="text-yellow-400 hover:text-yellow-300 transition duration-300">
+                            {{ config.phone }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
+        <!-- Home Section -->
+        <section id="home" class="relative h-screen flex items-center justify-center bg-cover bg-center" :style="{ backgroundImage: 'url(images/background.png)' }">
+            <div class="absolute inset-0 bg-black opacity-50"></div>
+            <div class="container mx-auto text-center text-white relative z-10">
+                <h1 class="text-5xl md:text-6xl font-bold mb-4 animate-fadeIn">
+                    {{ config.companyName }}
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 animate-fadeIn animation-delay-300">
+                    {{ config.companySlogan }}
+                </p>
+                <div class="flex justify-center space-x-4">
+                    <a href="#contact" class="bg-yellow-500 text-gray-900 py-3 px-8 rounded-full text-lg font-semibold hover:bg-yellow-400 transition duration-300 transform hover:scale-105 animate-fadeIn animation-delay-600">
+                        Získat nabídku
+                    </a>
+                    <a href="#services" class="bg-transparent border-2 border-white text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-white hover:text-gray-900 transition duration-300 transform hover:scale-105 animate-fadeIn animation-delay-600">
+                        Naše služby
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 bg-gray-50 overflow-hidden">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-bold text-center mb-16 text-gray-800 about-title">O nás</h2>
+                <div class="flex flex-wrap items-center">
+                    <div class="w-full lg:w-1/2 mb-12 lg:mb-0 about-image">
+                        <div class="relative">
+                            <img src="images/masonry1.png" alt="Náš tým" class="rounded-lg shadow-xl w-full">
+                            <div class="absolute -bottom-6 -right-6 bg-yellow-500 text-white p-4 rounded-lg shadow-lg">
+                                <p class="font-bold text-2xl">10+</p>
+                                <p>Let zkušeností</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full lg:w-1/2 lg:pl-16 about-text">
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Profesionální zednické služby</h3>
+                        <p class="mb-6 text-gray-600">Poskytuje špičkové zednické služby pro rezidenční i komerční projekty. Náš tým zkušených profesionálů se věnuje kvalitnímu zpracování a výjimečnému zákaznickému servisu.</p>
+                        <ul class="mb-8 space-y-4">
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center mr-4 mt-1">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-800 mb-1">Zkušený a kvalifikovaný tým</h4>
+                                    <p class="text-gray-600">Náš tým se skládá z odborníků s mnohaletými zkušenostmi v oboru.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center mr-4 mt-1">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-800 mb-1">Široká škála zednických služeb</h4>
+                                    <p class="text-gray-600">Poskytujeme komplexní zednické služby pro různé typy projektů.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center mr-4 mt-1">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-800 mb-1">Garance kvality a spokojenosti</h4>
+                                    <p class="text-gray-600">Zaručujeme vysokou kvalitu práce a plnou spokojenost našich klientů.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-20 bg-gray-100 overflow-hidden">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">Naše služby</h2>
+                <div class="relative">
+                    <div class="absolute left-1/2 top-0 bottom-0 w-1 bg-yellow-500 transform -translate-x-1/2"></div>
+                    <div class="space-y-32">
+                        <div v-for="(service, index) in config.services" :key="index" 
+                            class="flex items-center service-item" 
+                            :class="{'flex-row-reverse': index % 2 !== 0}">
+                            <div class="w-1/2 px-6 service-text" :class="{'text-right': index % 2 !== 0}">
+                                <div class="max-w-md" :class="{'ml-auto': index % 2 !== 0}">
+                                    <h3 class="text-3xl font-bold mb-4 text-gray-800">{{ service.title }}</h3>
+                                    <div class="w-16 h-1 bg-yellow-500 mb-4" :class="{'ml-auto': index % 2 !== 0}"></div>
+                                    <p class="text-lg text-gray-600 leading-relaxed">{{ service.description }}</p>
+                                </div>
+                            </div>
+                            <div class="w-1/2 flex justify-center service-image">
+                                <div class="relative w-64 h-64 rounded-full overflow-hidden border-4 border-yellow-500 shadow-lg">
+                                    <img :src="'images/' + service.image" :alt="service.title" class="absolute inset-0 w-full h-full object-cover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">Naše projekty</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div v-for="(project, index) in portfolio" :key="project.title" 
+                        class="bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-2xl portfolio-item cursor-pointer"
+                        @click="openProject(index)">
+                        <div class="relative h-64 overflow-hidden">
+                            <img :src="'images/' + project.images[0]" :alt="project.title" class="w-full h-full object-cover transition-transform duration-300 transform hover:scale-110">
+                            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 transition-opacity duration-300 hover:opacity-100">
+                                <span class="bg-yellow-500 text-white py-2 px-4 rounded-full text-sm font-semibold hover:bg-yellow-600 transition duration-300">
+                                    Zobrazit detail
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2 text-gray-800">{{ project.title }}</h3>
+                            <p class="text-gray-600 mb-4">{{ project.description }}</p>
+                            <div class="flex items-center text-yellow-500">
+                                <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <span class="text-sm font-semibold">{{ project.client }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Project Modal -->
+            <transition name="modal-fade">
+                <div v-if="selectedProject !== null" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" @click.self="closeProject">
+                    <div class="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden modal-content">
+                        <div class="p-6 overflow-y-auto flex-grow">
+                            <h2 class="text-3xl font-bold mb-4 text-gray-800">{{ portfolio[selectedProject].title }}</h2>
+                            <div class="mb-6 relative h-64">
+                                <transition-group name="fade" tag="div" class="relative h-full">
+                                    <img v-for="(image, index) in portfolio[selectedProject].images" 
+                                         :key="image" 
+                                         :src="'images/' + image" 
+                                         :alt="portfolio[selectedProject].title" 
+                                         class="w-full h-full object-cover rounded-lg absolute top-0 left-0"
+                                         v-show="index === currentImageIndex">
+                                </transition-group>
+                                <button @click="prevImage" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-75 text-gray-800 p-2 rounded-full hover:bg-opacity-100 transition duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                </button>
+                                <button @click="nextImage" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-75 text-gray-800 p-2 rounded-full hover:bg-opacity-100 transition duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </button>
+                            </div>
+                            <p class="mb-4 text-gray-600">{{ portfolio[selectedProject].details }}</p>
+                            <blockquote class="italic border-l-4 border-yellow-500 pl-4 mb-4 text-gray-600">
+                                "{{ portfolio[selectedProject].testimonial }}" 
+                                <span class="client-name">- {{ portfolio[selectedProject].client }}</span>
+                            </blockquote>
+                        </div>
+                        <div class="p-4 bg-gray-100 border-t border-gray-200">
+                            <button @click="closeProject" class="w-full bg-yellow-500 text-white py-2 px-6 rounded-full hover:bg-yellow-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50">
+                                Zavřít
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </section>
+
+        <!-- Reviews Section -->
+        <section id="reviews" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">Hodnocení zákazníků</h2>
+                <div class="max-w-4xl mx-auto">
+                    <div class="relative">
+                        <div class="overflow-hidden review-container">
+                            <transition-group name="fade" tag="div">
+                                <div v-for="(review, index) in reviews" :key="review.id" 
+                                     class="w-full review-card" 
+                                     :class="{ 'active': index === currentReviewIndex }">
+                                    <div class="bg-white p-8 rounded-lg shadow-lg h-full">
+                                        <div class="flex items-center mb-4">
+                                            <div class="text-yellow-500 flex">
+                                                <svg v-for="star in 5" :key="star" class="w-5 h-5" :class="{ 'text-gray-300': star > review.rating }" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                </svg>
+                                            </div>
+                                            <span class="ml-2 text-gray-600">{{ review.rating }}/5</span>
+                                        </div>
+                                        <p class="text-gray-600 mb-4">"{{ review.text }}"</p>
+                                        <p class="font-semibold text-gray-800">- {{ review.author }}</p>
+                                    </div>
+                                </div>
+                            </transition-group>
+                        </div>
+                    </div>
+                    <div class="flex justify-center mt-6">
+                        <div v-for="(review, index) in reviews" :key="review.id" 
+                             @click="setReview(index)" 
+                             class="w-3 h-3 rounded-full mx-1 cursor-pointer transition-all duration-300" 
+                             :class="index === currentReviewIndex ? 'bg-yellow-500' : 'bg-gray-300 hover:bg-yellow-300'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section id="team" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-4">
+              <h2 class="text-4xl font-bold text-center mb-2 text-gray-800">Náš tým odborníků</h2>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div v-for="member in team" :key="member.name" class="team-member bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                  <div class="relative h-64 overflow-hidden">
+                    <img :src="'images/' + member.image" :alt="member.name" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                      <h3 class="text-2xl font-semibold text-white">{{ member.name }}</h3>
+                      <p class="text-lg text-yellow-300">{{ member.role }}</p>
+                    </div>
+                  </div>
+                  <div class="p-6">
+                    <p class="text-gray-600 mb-4">{{ member.bio }}</p>
+                    <div class="flex items-center text-yellow-500">
+                      <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                      </svg>
+                      <span class="text-gray-700 font-medium">{{ member.experience }} let v oboru</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">Kontaktujte nás</h2>
+          
+                <div class="flex flex-wrap -mx-4">
+                    <div class="w-full lg:w-1/2 px-4 mb-8 lg:mb-0 animate-item">
+                        <form @submit.prevent="submitForm" class="bg-white rounded-lg shadow-lg p-8">
+                            <div class="mb-6 animate-item">
+                                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Jméno</label>
+                                <input type="text" id="name" v-model="form.name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            </div>
+                            <div class="mb-6 animate-item">
+                                <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                                <input type="email" id="email" v-model="form.email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            </div>
+                            <div class="mb-6 animate-item">
+                                <label for="message" class="block text-gray-700 text-sm font-bold mb-2">Zpráva</label>
+                                <textarea id="message" v-model="form.message" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32" required></textarea>
+                            </div>
+                            <div class="flex items-center justify-between animate-item">
+                                <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+                                    Odeslat zprávu
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+          
+                    <div class="w-full lg:w-1/2 px-4 animate-item">
+                        <div class="bg-white rounded-lg shadow-lg p-8 h-full">
+                            <h3 class="text-2xl font-semibold mb-6 text-gray-800 animate-item">Kontaktní informace</h3>
+                            <div class="mb-6 animate-item">
+                                <svg class="w-6 h-6 mr-2 text-yellow-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                                {{ config.phone }}
+                            </div>
+                        <div class="mb-6 animate-item">
+                            <svg class="w-6 h-6 mr-2 text-yellow-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            {{ config.email }}
+                        </div>
+                        <div class="mb-6 animate-item">
+                            <svg class="w-6 h-6 mr-2 text-yellow-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            {{ config.address }}
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-12">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4">{{ config.companyName }}</h3>
+                        <p class="mb-4">{{ config.companySlogan }}</p>
+                        <div class="flex space-x-4">
+                            <a v-for="(url, platform) in config.socialMedia" :key="platform" :href="url" target="_blank" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                                <svg v-if="platform === 'facebook'" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+                                <svg v-else-if="platform === 'instagram'" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                                <svg v-else-if="platform === 'linkedin'" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4">Rychlé odkazy</h4>
+                        <ul class="space-y-2">
+                            <li v-for="item in navItems" :key="item.href">
+                                <a :href="item.href" class="hover:text-yellow-500 transition duration-300">{{ item.text }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4">Kontakt</h4>
+                        <p class="flex items-center mb-2">
+                            <svg class="w-5 h-5 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            {{ config.phone }}
+                        </p>
+                        <p class="flex items-center mb-2">
+                            <svg class="w-5 h-5 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            {{ config.email }}
+                        </p>
+                        <p class="flex items-start mb-2">
+                            <svg class="w-5 h-5 mr-2 mt-1 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            {{ config.address }}
+                        </p>
+                    </div>
+                </div>
+                <hr class="my-8 border-gray-700">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p>&copy; {{ new Date().getFullYear() }} {{ config.companyName }}. Všechna práva vyhrazena.</p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Scroll to Top Button -->
+        <button id="scrollToTopBtn" @click="scrollToTop" aria-label="Scroll to top">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+            </svg>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
